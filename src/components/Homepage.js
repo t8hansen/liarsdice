@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import {Centered} from './styling/centered'
+import {Centered} from './styling/centered';
 
 export const Homepage = () => {
   return (

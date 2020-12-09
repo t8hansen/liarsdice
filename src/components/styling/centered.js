@@ -6,3 +6,11 @@ export const Centered = styled('div', {
   alignItems: 'center',
   height: '100%',
 });
+
+
+export const BottomRight = styled('div', {
+  display: 'flex',
+  justifyContent: 'right',
+  alignItems: 'right',
+  height: '100%',
+});

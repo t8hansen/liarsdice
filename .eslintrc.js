@@ -20,6 +20,11 @@ module.exports = {
   ],
   "rules": {
     // ...
+    'linebreak-style': 0,
+    'no-unused-vars': 'warn',
+    'eol-last': 'warn',
+    'semi': 'warn',
+    'no-trailing-spaces': 'warn',
     'baseui/deprecated-theme-api': "warn",
     'baseui/deprecated-component-api': "warn",
     'baseui/no-deep-imports': "warn",
