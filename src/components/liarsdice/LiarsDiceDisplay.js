@@ -70,7 +70,7 @@ export const LiarsDiceDisplay = () => {
           }}
           style={{marginLeft: '90%'}}
         >
-          Roll Again
+          Roll
         </Button>
       </BottomRight>
     </div>
