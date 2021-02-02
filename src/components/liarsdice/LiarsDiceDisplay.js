@@ -4,6 +4,8 @@ import {Link} from 'react-router-dom';
 
 import {Centered, BottomRight} from '../styling/centered';
 import {Button, KIND, SIZE} from 'baseui/button';
+import {Input} from 'baseui/input';
+import {TextArea} from 'baseui/textarea';
 
 import {rollDie} from './rollDie';
 import one from '../../photos/1.gif';
@@ -34,6 +36,8 @@ const getPhoto = (number, i) => {
 export const LiarsDiceDisplay = () => {
   const [currentNumberOfDie, setCurrentNumberOfDie] = useState(5);
   const [diceNumbers, setDiceNumbers] = useState([]);
+  const [betQuantity, setBetQuantity] = useState('');
+  const [betNumber, setBetNumber] = useState('');
 
   const reRollDice = () => {
     setDiceNumbers(rollDie(currentNumberOfDie));
@@ -63,6 +67,44 @@ export const LiarsDiceDisplay = () => {
           )}
         </div>
       </Centered>
+      <BottomRight>
+        <Input
+          value = {betQuantity}
+          onChange= {(e) =>setBetQuantity(e.target.value)}
+        />
+        <Input
+          value = {betNumber}
+          onChange= {(e) =>setBetNumber(e.target.value)}
+        />
+        <Button
+          onClick={()=>{
+            reRollDice();
+          }}
+          style={{marginLeft: '90%'}}
+        >
+          Bet
+        </Button>
+      </BottomRight>
+      <BottomRight>
+        <Button
+          onClick={()=>{
+            reRollDice();
+          }}
+          style={{marginLeft: '90%'}}
+        >
+          Bullshit
+        </Button>
+      </BottomRight>
+      <BottomRight>
+        <Button
+          onClick={()=>{
+            reRollDice();
+          }}
+          style={{marginLeft: '90%'}}
+        >
+          Exact
+        </Button>
+      </BottomRight>
       <BottomRight>
         <Button
           onClick={()=>{
