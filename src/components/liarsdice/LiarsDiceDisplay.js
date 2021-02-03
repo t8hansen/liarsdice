@@ -1,11 +1,16 @@
 /* eslint-disable linebreak-style */
+/* eslint max-len: ["error", { "ignoreComments": true }]*/
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 
 import {Centered, BottomRight} from '../styling/centered';
 import {Button, KIND, SIZE} from 'baseui/button';
 import {Input} from 'baseui/input';
-import {TextArea} from 'baseui/textarea';
+import {Textarea} from 'baseui/textarea';
+
+import Container from '../LayoutComponents/container';
+import Flex from '../LayoutComponents/flexLayout';
+import FlexCell from '../LayoutComponents/flexCell';
 
 import {rollDie} from './rollDie';
 import one from '../../photos/1.gif';
@@ -16,79 +21,156 @@ import five from '../../photos/5.gif';
 import six from '../../photos/6.gif';
 import pokerTable from '../../photos/poker-table.jpg';
 
-const getPhoto = (number, i) => {
-  if (number === 1) {
-    return <img key={i} src={one} alt='one' height={100} width={100} />;
-  } else if (number === 2) {
-    return <img key={i} src={two} alt='two'height={100} width={100} />;
-  } else if (number === 3) {
-    return <img key={i} src={three} alt='three'height={100} width={100} />;
-  } else if (number === 4) {
-    return <img key={i} src={four} alt='four'height={100} width={100} />;
-  } else if (number === 5) {
-    return <img key={i} src={five} alt='five'height={100} width={100} />;
-  } else if (number === 6) {
-    return <img key={i} src={six} alt='six'height={100} width={100} />;
-  }
+const PHOTO_MAP = {
+  1: one,
+  2: two,
+  3: three,
+  4: four,
+  5: five,
+  6: six,
 };
 
+const PHOTO_MAP_CONST = {
+  1: 'one',
+  2: 'two',
+  3: 'three',
+  4: 'four',
+  5: 'five',
+  6: 'six',
+};
+
+const getPhoto = (number, i) => {
+  return (
+    <FlexCell
+      marginTop = {'100px'}
+    >
+      <img
+        key={i}
+        src={PHOTO_MAP[number]}
+        alt={PHOTO_MAP_CONST[number]}
+        height={100}
+        width={100}
+      />
+    </FlexCell>
+  );
+};
+
+// <img src={pokerTable} height={400} width={700} />
 
 export const LiarsDiceDisplay = () => {
   const [currentNumberOfDie, setCurrentNumberOfDie] = useState(5);
   const [diceNumbers, setDiceNumbers] = useState([]);
   const [betQuantity, setBetQuantity] = useState('');
   const [betNumber, setBetNumber] = useState('');
+  const [logString, setLogString] = useState('');
 
   const reRollDice = () => {
     setDiceNumbers(rollDie(currentNumberOfDie));
   };
 
+  const betLogString = (quantity, dieNumber, player) => {
+    setLogString(`${logString}
+    ${player} has bet ${quantity} ${dieNumber}s`);
+  };
+
+  const exactLogString = (player) => {
+    setLogString(`${logString}
+    ${player} has called Exact`);
+  };
+
+  const bullshitLogString = (player) => {
+    setLogString(`${logString}
+    ${player} has called Bullshit`);
+  };
+
+
   return (
-    <div>
+    <Container>
       <Link to='/'>Homepage</Link>
       <Centered>
         <h1>
         Liars Dice
         </h1>
       </Centered>
-      <Centered>
-        <div>
-          <img src={pokerTable} height={400} width={700} />
-        </div>
-      </Centered>
-      <Centered>
-        <div>
-          {diceNumbers.length > 0 ? (diceNumbers.map((number, i) => {
-            return (getPhoto(number, i));
-          })):(
-            <h3>
-              The Game is Starting
-            </h3>
-          )}
-        </div>
-      </Centered>
-      <BottomRight>
-        <Input
-          value = {betQuantity}
-          onChange= {(e) =>setBetQuantity(e.target.value)}
-        />
-        <Input
-          value = {betNumber}
-          onChange= {(e) =>setBetNumber(e.target.value)}
-        />
-        <Button
-          onClick={()=>{
-            reRollDice();
-          }}
-          style={{marginLeft: '90%'}}
+      <Container>
+        <Flex
+          horizontalAlign = {'flex-end'}
+          verticalAlign = {'start'}
         >
-          Bet
-        </Button>
+          <FlexCell
+            width={'70%'}
+          >
+            <Flex
+              horizontalAlign = {'center'}
+            >
+              {diceNumbers.length > 0 ? (diceNumbers.map((number, i) => {
+                return (getPhoto(number, i));
+              })):(
+                <h3>
+                  The Game is Starting
+                </h3>
+              )}
+            </Flex>
+          </FlexCell>
+          <FlexCell
+            borderStyle={'solid'}
+            marginTop={'0px'}
+          >
+            <Container
+              borderStyle={'solid'}
+            >
+              <Textarea
+                value ={logString}
+                disabled={true}
+                overrides={{
+                  Input: {
+                    style: {
+                      maxHeight: '600px',
+                      minHeight: '300px',
+                      minWidth: '300px',
+                      resize: 'both',
+                    },
+                  },
+                  InputContainer: {
+                    style: {
+                      maxWidth: '100%',
+                      width: 'min-content',
+                    },
+                  },
+                }}
+              />
+            </Container>
+          </FlexCell>
+        </Flex>
+      </Container>
+      <Container>
+        <Flex>
+          <FlexCell>
+            <Input
+              value = {betQuantity}
+              onChange= {(e) =>setBetQuantity(e.target.value)}
+            />
+            <Input
+              value = {betNumber}
+              onChange= {(e) =>setBetNumber(e.target.value)}
+            />
+            <Button
+              onClick={()=>{
+                betLogString(betQuantity, betNumber, 'Player 1');
+              }}
+              style={{marginLeft: '90%'}}
+            >
+              Bet
+            </Button>
+          </FlexCell>
+        </Flex>
+      </Container>
+      <BottomRight>
       </BottomRight>
       <BottomRight>
         <Button
           onClick={()=>{
-            reRollDice();
+            bullshitLogString('Player 1');
           }}
           style={{marginLeft: '90%'}}
         >
@@ -98,7 +180,7 @@ export const LiarsDiceDisplay = () => {
       <BottomRight>
         <Button
           onClick={()=>{
-            reRollDice();
+            exactLogString('Player 1');
           }}
           style={{marginLeft: '90%'}}
         >
@@ -115,7 +197,7 @@ export const LiarsDiceDisplay = () => {
           Roll
         </Button>
       </BottomRight>
-    </div>
+    </Container>
   );
 };
 

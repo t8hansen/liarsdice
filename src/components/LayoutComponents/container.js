@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React, {useMemo} from 'react';
 
 type KnownProps = {
     children?: any,
@@ -12,7 +12,7 @@ type KnownProps = {
     overflow?: String,
     background?: String,
     position?: String,
-    top? string,
+    top?: string,
     bottom?: string,
     left?: string,
     right?: string,
@@ -53,7 +53,7 @@ const Container = ({
     maxHeight,
     width,
     flexValue,
-    overflow= "auto",
+    overflow= 'auto',
     background,
     postion,
     top,
@@ -82,10 +82,11 @@ const Container = ({
             ...(borderRight ? { borderRight: borderRight } :undefined),
             ...(borderLeft ? { borderLeft: borderLeft } :undefined),
             ...(borderColor ? { borderColor: borderColor } :undefined),
-            ...(borderWidth || borderColor ? { borderStyle: "solid" } :undefined),
-            boxSizing: "border-box",
+            ...(borderWidth || borderColor ? { borderStyle: 'solid' } :
+            undefined),
+            boxSizing: 'border-box',
             overflow: overflow,
-            postion: postion || "relative",
+            postion: postion || 'relative',
             top: top || undefined,
             bottom: bottom || undefined,
             left: left || undefined,
