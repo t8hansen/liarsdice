@@ -6,6 +6,8 @@ import {Link} from 'react-router-dom';
 import {Centered, BottomRight} from '../styling/centered';
 import {Button, KIND, SIZE} from 'baseui/button';
 import {Input} from 'baseui/input';
+import {Select} from 'baseui/select';
+import {Block} from 'baseui/block';
 import {Textarea} from 'baseui/textarea';
 
 import Container from '../LayoutComponents/container';
@@ -20,6 +22,15 @@ import four from '../../photos/4.gif';
 import five from '../../photos/5.gif';
 import six from '../../photos/6.gif';
 import pokerTable from '../../photos/poker-table.jpg';
+
+const NumberOptions = [
+  {label: '1', value: '1'},
+  {label: '2', value: '2'},
+  {label: '3', value: '3'},
+  {label: '4', value: '4'},
+  {label: '5', value: '5'},
+  {label: '6', value: '6'},
+];
 
 const PHOTO_MAP = {
   1: one,
@@ -61,7 +72,7 @@ export const LiarsDiceDisplay = () => {
   const [currentNumberOfDie, setCurrentNumberOfDie] = useState(5);
   const [diceNumbers, setDiceNumbers] = useState([]);
   const [betQuantity, setBetQuantity] = useState('');
-  const [betNumber, setBetNumber] = useState('');
+  const [betNumber, setBetNumber] = useState([]);
   const [logString, setLogString] = useState('');
 
   const reRollDice = () => {
@@ -143,60 +154,86 @@ export const LiarsDiceDisplay = () => {
           </FlexCell>
         </Flex>
       </Container>
-      <Container>
-        <Flex>
-          <FlexCell>
-            <Input
-              value = {betQuantity}
-              onChange= {(e) =>setBetQuantity(e.target.value)}
-            />
-            <Input
-              value = {betNumber}
-              onChange= {(e) =>setBetNumber(e.target.value)}
-            />
+      <Container
+        borderStyle='solid'
+      >
+        <Flex
+          borderStyle='solid'
+          horizontalAlign='space-between'
+        >
+          <Block
+            horizontalAlign = 'start'
+            verticalAlign= 'start'
+            display='grid'
+            gridTemplateColumns={`repeat(2,1fr)`}
+            gridGap = 'scale10'
+            height = 'auto'
+            width = '25%'
+          >
+            <Container>
+              Bet Amount
+            </Container>
+            <Container width='60px'>
+              <Input
+                value = {betQuantity}
+                onChange= {(e) =>setBetQuantity(e.target.value)}
+                overrides={{ControlContainer: {style: {width: '10px'}}}}
+                size={SIZE.mini}
+              />
+            </Container>
+            <div style = {{height: '10px'}} />
+            <div style = {{height: '10px'}} />
+            <Container>
+              Number
+            </Container>
+            <Container width='60px'>
+              <Select
+                options = {NumberOptions}
+                value = {betNumber}
+                onChange= {(e) =>setBetNumber(e.value)}
+                maxDropdownHeight={'100px'}
+                clearable={false}
+                height = {SIZE.mini}
+              />
+            </Container>
+            <div style = {{height: '10px'}} />
             <Button
               onClick={()=>{
                 betLogString(betQuantity, betNumber, 'Player 1');
               }}
-              style={{marginLeft: '90%'}}
             >
               Bet
+            </Button>
+          </Block>
+          <FlexCell>
+            <Button
+              onClick={()=>{
+                bullshitLogString('Player 1');
+              }}
+            >
+              Bullshit
+            </Button>
+          </FlexCell>
+          <FlexCell>
+            <Button
+              onClick={()=>{
+                exactLogString('Player 1');
+              }}
+            >
+              Exact
+            </Button>
+          </FlexCell>
+          <FlexCell>
+            <Button
+              onClick={()=>{
+                reRollDice();
+              }}
+            >
+              Roll
             </Button>
           </FlexCell>
         </Flex>
       </Container>
-      <BottomRight>
-      </BottomRight>
-      <BottomRight>
-        <Button
-          onClick={()=>{
-            bullshitLogString('Player 1');
-          }}
-          style={{marginLeft: '90%'}}
-        >
-          Bullshit
-        </Button>
-      </BottomRight>
-      <BottomRight>
-        <Button
-          onClick={()=>{
-            exactLogString('Player 1');
-          }}
-          style={{marginLeft: '90%'}}
-        >
-          Exact
-        </Button>
-      </BottomRight>
-      <BottomRight>
-        <Button
-          onClick={()=>{
-            reRollDice();
-          }}
-          style={{marginLeft: '90%'}}
-        >
-          Roll
-        </Button>
-      </BottomRight>
     </Container>
   );
 };
