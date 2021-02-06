@@ -21,34 +21,9 @@ import three from '../../photos/3.gif';
 import four from '../../photos/4.gif';
 import five from '../../photos/5.gif';
 import six from '../../photos/6.gif';
-import pokerTable from '../../photos/poker-table.jpg';
+// import pokerTable from '../../photos/poker-table.jpg';
 
-const NumberOptions = [
-  {label: '1', value: '1'},
-  {label: '2', value: '2'},
-  {label: '3', value: '3'},
-  {label: '4', value: '4'},
-  {label: '5', value: '5'},
-  {label: '6', value: '6'},
-];
-
-const PHOTO_MAP = {
-  1: one,
-  2: two,
-  3: three,
-  4: four,
-  5: five,
-  6: six,
-};
-
-const PHOTO_MAP_CONST = {
-  1: 'one',
-  2: 'two',
-  3: 'three',
-  4: 'four',
-  5: 'five',
-  6: 'six',
-};
+import {NumberOptions, PHOTO_MAP, PHOTO_MAP_CONST} from './const.js';
 
 const getPhoto = (number, i) => {
   return (
@@ -72,7 +47,7 @@ export const LiarsDiceDisplay = () => {
   const [currentNumberOfDie, setCurrentNumberOfDie] = useState(5);
   const [diceNumbers, setDiceNumbers] = useState([]);
   const [betQuantity, setBetQuantity] = useState('');
-  const [betNumber, setBetNumber] = useState([{label: '1', value: '1'}]);
+  const [betNumber, setBetNumber] = useState([{label: '6', value: '6'}]);
   const [logString, setLogString] = useState('');
 
   const reRollDice = () => {
@@ -196,7 +171,7 @@ export const LiarsDiceDisplay = () => {
               <Select
                 options = {NumberOptions}
                 value = {betNumber}
-                onChange= {(e) => setBetSelect(e.value)}
+                onChange= {e => setBetSelect(e.value)}
                 maxDropdownHeight={'100px'}
                 clearable={false}
                 height = {SIZE.mini}
