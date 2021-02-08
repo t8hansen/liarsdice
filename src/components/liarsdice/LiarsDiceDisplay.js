@@ -24,9 +24,9 @@ import six from '../../photos/6.gif';
 // import pokerTable from '../../photos/poker-table.jpg';
 
 import {NumberOptions, PHOTO_MAP, PHOTO_MAP_CONST} from './const.js';
+const numWords = require('num-words');
 
 const getPhoto = (number, i) => {
-  console.log(i)
   return (
     <FlexCell
       marginTop = {'100px'}
@@ -116,6 +116,46 @@ export const LiarsDiceDisplay = () => {
     ${player} has called Bullshit`);
   };
 
+  const nextHighestOnesCall = () => {
+    if (parseInt(betLog['dieNumber']) === 0) {
+      return 1;
+    } else if (parseInt(betLog['dieNumber']) === 1) {
+      return parseInt(betLog['quantity']) + 1;
+    } else {
+      return Math.ceil(parseInt(betLog['quantity']) / 2);
+    }
+  };
+
+  const nextHighestCall = () => {
+    if (parseInt(betLog['dieNumber']) === 0) {
+      return [1, 2];
+    } else if (parseInt(betLog['dieNumber']) === 6 &&
+    parseInt(betLog['quantity']) % 2 === 1) {
+      return [parseInt(betLog['quantity']) + 1, 2];
+    } else if (parseInt(betLog['dieNumber']) === 6 &&
+    parseInt(betLog['quantity']) % 2 === 0) {
+      return [parseInt(betLog['quantity'])/2, 1];
+    } else if (parseInt(betLog['dieNumber']) === 1) {
+      return [parseInt(betLog['quantity']*2 + 1), 2];
+    } else {
+      return [betLog['quantity'], parseInt(betLog['dieNumber']) + 1];
+    }
+  };
+
+  const bumpTheNumber = () => {
+    if (parseInt(betLog['dieNumber']) === 0) {
+      return [1, 2];
+    } else {
+      return [parseInt(betLog['quantity']) + 1, parseInt(betLog['dieNumber'])];
+    }
+  };
+
+  const numToWordCapitalize = (number) => {
+    const numToWord = numWords(number);
+    return numToWord.charAt(0).toUpperCase() + numToWord.slice(1);
+  };
+
+
   return (
     <Container>
       <Link to='/'>Homepage</Link>
@@ -191,6 +231,45 @@ export const LiarsDiceDisplay = () => {
             height = 'auto'
             width = '25%'
           >
+            <Container>
+              {`Quick Bets`}
+            </Container>
+            <Button
+              onClick={()=>{
+                betLogString(nextHighestOnesCall(), '1', 'Player 1');
+              }}
+              overrides={{BaseButton: {style: {width: '60px'}}}}
+            >
+              {`${numToWordCapitalize(nextHighestOnesCall())} 1s`}
+            </Button>
+            <div style = {{height: '10px'}} />
+            <Button
+              onClick={()=>{
+                betLogString(
+                    nextHighestCall()[0],
+                    nextHighestCall()[1],
+                    'Player 1');
+              }}
+              overrides={{BaseButton: {style: {width: '60px'}}}}
+            >
+              {`${numToWordCapitalize(
+                  nextHighestCall()[0])} ${nextHighestCall()[1]}s`}
+            </Button>
+            <div style = {{height: '10px'}} />
+            <Button
+              onClick={()=>{
+                betLogString(
+                    bumpTheNumber()[0],
+                    bumpTheNumber()[1],
+                    'Player 1');
+              }}
+              overrides={{BaseButton: {style: {width: '60px'}}}}
+            >
+              {`${numToWordCapitalize(
+                  bumpTheNumber()[0])} ${bumpTheNumber()[1]}s`}
+            </Button>
+            <div style = {{height: '10px'}} />
+            <div style = {{height: '10px'}} />
             <Container>
               Bet Amount
             </Container>
