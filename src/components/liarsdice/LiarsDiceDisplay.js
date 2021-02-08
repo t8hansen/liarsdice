@@ -26,6 +26,7 @@ import six from '../../photos/6.gif';
 import {NumberOptions, PHOTO_MAP, PHOTO_MAP_CONST} from './const.js';
 
 const getPhoto = (number, i) => {
+  console.log(i)
   return (
     <FlexCell
       marginTop = {'100px'}
@@ -49,14 +50,60 @@ export const LiarsDiceDisplay = () => {
   const [betQuantity, setBetQuantity] = useState('');
   const [betNumber, setBetNumber] = useState([{label: '1', id: '1'}]);
   const [logString, setLogString] = useState('');
+  const [betLog, setBetLog] = useState({quantity: '0', dieNumber: '0'});
 
   const reRollDice = () => {
     setDiceNumbers(rollDie(currentNumberOfDie));
   };
 
+  // will be false if it is a valid bet
+  const bettingRulesNotFollowed = (quantity, dieNumber) => {
+    const currentQuantity = parseInt(quantity);
+    const currentDieNumber = parseInt(dieNumber);
+
+    const previousQuantity = parseInt(betLog['quantity']);
+    const previousDieNumber = parseInt(betLog['dieNumber']);
+
+    if (previousDieNumber === 0 && previousQuantity === 0) {
+      return false;
+    } else if (currentDieNumber !== 1 &&
+       previousDieNumber !== 1 &&
+      (currentQuantity > previousQuantity ||
+         currentDieNumber > previousDieNumber)) {
+      // false due to bet quantity or bet number being larger
+      return false;
+    } else if (currentDieNumber === 1 &&
+      previousDieNumber === 1 &&
+      currentQuantity > previousQuantity) {
+      // false due to 1s being worth more than double
+      return false;
+    } else if (currentDieNumber === 1 &&
+    previousDieNumber !== 1 &&
+    currentQuantity * 2 > previousQuantity) {
+      // false due to 1s being worth more than double
+      return false;
+    } else if (currentDieNumber !== 1 &&
+    previousDieNumber === 1 &&
+    currentQuantity > previousQuantity * 2) {
+      // false due to 1s being worth more than double
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   const betLogString = (quantity, dieNumber, player) => {
-    setLogString(`${logString}
+    if (quantity === '') {
+      setLogString(`${logString}
+    Please enter in the quantity of dice`);
+    } else if (bettingRulesNotFollowed(quantity, dieNumber)) {
+      setLogString(`${logString}
+    Please enter in a higher bet than the previous call`);
+    } else {
+      setLogString(`${logString}
     ${player} has bet ${quantity} ${dieNumber}s`);
+      setBetLog({quantity: quantity, dieNumber: dieNumber});
+    }
   };
 
   const exactLogString = (player) => {
@@ -175,28 +222,42 @@ export const LiarsDiceDisplay = () => {
               onClick={()=>{
                 betLogString(betQuantity, betNumber[0].id, 'Player 1');
               }}
+              overrides={{BaseButton: {style: {width: '60px'}}}}
             >
               Bet
             </Button>
           </Block>
-          <FlexCell>
-            <Button
-              onClick={()=>{
-                bullshitLogString('Player 1');
-              }}
-            >
-              Bullshit
-            </Button>
-          </FlexCell>
-          <FlexCell>
-            <Button
-              onClick={()=>{
-                exactLogString('Player 1');
-              }}
-            >
-              Exact
-            </Button>
-          </FlexCell>
+          <Block
+            horizontalAlign = 'start'
+            verticalAlign= 'start'
+            display='grid'
+            gridTemplateColumns={`repeat(1,1fr)`}
+            gridGap = 'scale10'
+            height = 'auto'
+            width = '25%'
+          >
+            <FlexCell>
+              <Button
+                onClick={()=>{
+                  bullshitLogString('Player 1');
+                }}
+                overrides={{BaseButton: {style: {width: '60px'}}}}
+              >
+                Bullshit
+              </Button>
+            </FlexCell>
+            <div style = {{height: '10px'}} />
+            <FlexCell>
+              <Button
+                onClick={()=>{
+                  exactLogString('Player 1');
+                }}
+                overrides={{BaseButton: {style: {width: '60px'}}}}
+              >
+                {'Exact   '}
+              </Button>
+            </FlexCell>
+          </Block>
           <FlexCell>
             <Button
               onClick={()=>{
