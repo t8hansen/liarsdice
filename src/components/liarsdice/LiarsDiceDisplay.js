@@ -47,7 +47,7 @@ export const LiarsDiceDisplay = () => {
   const [currentNumberOfDie, setCurrentNumberOfDie] = useState(5);
   const [diceNumbers, setDiceNumbers] = useState([]);
   const [betQuantity, setBetQuantity] = useState('');
-  const [betNumber, setBetNumber] = useState([{label: '6', value: '6'}]);
+  const [betNumber, setBetNumber] = useState([{label: '1', id: '1'}]);
   const [logString, setLogString] = useState('');
 
   const reRollDice = () => {
@@ -68,13 +68,6 @@ export const LiarsDiceDisplay = () => {
     setLogString(`${logString}
     ${player} has called Bullshit`);
   };
-
-  const setBetSelect = (dropdownValue) => {
-    console.log(dropdownValue);
-    setBetNumber(dropdownValue);
-    console.log(betNumber)
-  };
-
 
   return (
     <Container>
@@ -171,7 +164,7 @@ export const LiarsDiceDisplay = () => {
               <Select
                 options = {NumberOptions}
                 value = {betNumber}
-                onChange= {e => setBetSelect(e.value)}
+                onChange= {(e) => setBetNumber(e.value)}
                 maxDropdownHeight={'100px'}
                 clearable={false}
                 height = {SIZE.mini}
@@ -180,7 +173,7 @@ export const LiarsDiceDisplay = () => {
             <div style = {{height: '10px'}} />
             <Button
               onClick={()=>{
-                betLogString(betQuantity, betNumber[0].value, 'Player 1');
+                betLogString(betQuantity, betNumber[0].id, 'Player 1');
               }}
             >
               Bet
