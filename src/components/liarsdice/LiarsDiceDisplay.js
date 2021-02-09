@@ -51,9 +51,11 @@ export const LiarsDiceDisplay = () => {
   const [betNumber, setBetNumber] = useState([{label: '1', id: '1'}]);
   const [logString, setLogString] = useState('');
   const [betLog, setBetLog] = useState({quantity: '0', dieNumber: '0'});
+  const [rolled, setRolled] = useState(false);
 
   const reRollDice = () => {
     setDiceNumbers(rollDie(currentNumberOfDie));
+    setRolled(true);
   };
 
   // will be false if it is a valid bet
@@ -109,11 +111,13 @@ export const LiarsDiceDisplay = () => {
   const exactLogString = (player) => {
     setLogString(`${logString}
     ${player} has called Exact`);
+    setRolled(false);
   };
 
   const bullshitLogString = (player) => {
     setLogString(`${logString}
     ${player} has called Bullshit`);
+    setRolled(false);
   };
 
   const nextHighestOnesCall = () => {
@@ -166,7 +170,7 @@ export const LiarsDiceDisplay = () => {
       </Centered>
       <Container>
         <Flex
-          horizontalAlign = {'flex-end'}
+          horizontalAlign = 'flex-end'
           verticalAlign = {'start'}
         >
           <FlexCell
@@ -187,6 +191,7 @@ export const LiarsDiceDisplay = () => {
           <FlexCell
             borderStyle={'solid'}
             marginTop={'0px'}
+            width={'30%'}
           >
             <Container
               borderStyle={'solid'}
@@ -222,90 +227,97 @@ export const LiarsDiceDisplay = () => {
           borderStyle='solid'
           horizontalAlign='space-between'
         >
-          <Block
-            horizontalAlign = 'start'
-            verticalAlign= 'start'
-            display='grid'
-            gridTemplateColumns={`repeat(2,1fr)`}
-            gridGap = 'scale10'
-            height = 'auto'
-            width = '25%'
+          <Flex
+            width={'50%'}
           >
-            <Container>
-              {`Quick Bets`}
-            </Container>
-            <Button
-              onClick={()=>{
-                betLogString(nextHighestOnesCall(), '1', 'Player 1');
-              }}
-              overrides={{BaseButton: {style: {width: '60px'}}}}
+            <Block
+              horizontalAlign = 'start'
+              verticalAlign= 'start'
+              display='grid'
+              gridTemplateColumns={`repeat(2,1fr)`}
+              gridGap = 'scale10'
+              height = 'auto'
+              width = '100%'
             >
-              {`${numToWordCapitalize(nextHighestOnesCall())} 1s`}
-            </Button>
-            <div style = {{height: '10px'}} />
-            <Button
-              onClick={()=>{
-                betLogString(
-                    nextHighestCall()[0],
-                    nextHighestCall()[1],
-                    'Player 1');
-              }}
-              overrides={{BaseButton: {style: {width: '60px'}}}}
-            >
-              {`${numToWordCapitalize(
-                  nextHighestCall()[0])} ${nextHighestCall()[1]}s`}
-            </Button>
-            <div style = {{height: '10px'}} />
-            <Button
-              onClick={()=>{
-                betLogString(
-                    bumpTheNumber()[0],
-                    bumpTheNumber()[1],
-                    'Player 1');
-              }}
-              overrides={{BaseButton: {style: {width: '60px'}}}}
-            >
-              {`${numToWordCapitalize(
-                  bumpTheNumber()[0])} ${bumpTheNumber()[1]}s`}
-            </Button>
-            <div style = {{height: '10px'}} />
-            <div style = {{height: '10px'}} />
-            <Container>
-              Bet Amount
-            </Container>
-            <Container width='60px'>
-              <Input
-                value = {betQuantity}
-                onChange= {(e) =>setBetQuantity(e.target.value)}
-                overrides={{ControlContainer: {style: {width: '10px'}}}}
-                size={SIZE.mini}
-              />
-            </Container>
-            <div style = {{height: '10px'}} />
-            <div style = {{height: '10px'}} />
-            <Container>
-              Number
-            </Container>
-            <Container width='60px'>
+              <Container>
+                {`Quick Bets`}
+              </Container>
+              <Button
+                onClick={()=>{
+                  betLogString(nextHighestOnesCall(), '1', 'Player 1');
+                }}
+                overrides={{BaseButton: {style: {width: '100%'}}}}
+                disabled={!rolled}
+              >
+                {`${numToWordCapitalize(nextHighestOnesCall())} 1s`}
+              </Button>
+              <div style = {{height: '10px'}} />
+              <Button
+                onClick={()=>{
+                  betLogString(
+                      nextHighestCall()[0],
+                      nextHighestCall()[1],
+                      'Player 1');
+                }}
+                overrides={{BaseButton: {style: {width: '100%'}}}}
+                disabled={!rolled}
+              >
+                {`${numToWordCapitalize(
+                    nextHighestCall()[0])} ${nextHighestCall()[1]}s`}
+              </Button>
+              <div style = {{height: '10px'}} />
+              <Button
+                onClick={()=>{
+                  betLogString(
+                      bumpTheNumber()[0],
+                      bumpTheNumber()[1],
+                      'Player 1');
+                }}
+                overrides={{BaseButton: {style: {width: '100%'}}}}
+                disabled={!rolled}
+              >
+                {`${numToWordCapitalize(
+                    bumpTheNumber()[0])} ${bumpTheNumber()[1]}s`}
+              </Button>
+              <div style = {{height: '10px'}} />
+              <div style = {{height: '10px'}} />
+              <Container>
+                Bet Amount
+              </Container>
+              <Container width='60px'>
+                <Input
+                  value = {betQuantity}
+                  onChange= {(e) =>setBetQuantity(e.target.value)}
+                  overrides={{ControlContainer: {style: {width: '10px'}}}}
+                  size={SIZE.mini}
+                />
+              </Container>
+              <div style = {{height: '10px'}} />
+              <div style = {{height: '10px'}} />
+              <Container>
+                Number
+              </Container>
               <Select
                 options = {NumberOptions}
                 value = {betNumber}
                 onChange= {(e) => setBetNumber(e.value)}
-                maxDropdownHeight={'100px'}
+                maxDropdownHeight={'200px'}
                 clearable={false}
                 height = {SIZE.mini}
               />
-            </Container>
-            <div style = {{height: '10px'}} />
-            <Button
-              onClick={()=>{
-                betLogString(betQuantity, betNumber[0].id, 'Player 1');
-              }}
-              overrides={{BaseButton: {style: {width: '60px'}}}}
-            >
-              Bet
-            </Button>
-          </Block>
+              <div style = {{height: '10px'}} />
+              <Button
+                onClick={()=>{
+                  betLogString(betQuantity, betNumber[0].id, 'Player 1');
+                }}
+                overrides={{BaseButton: {style: {width: '60px'}}}}
+                disabled={!rolled}
+              >
+                Bet
+              </Button>
+            </Block>
+
+          </Flex>
           <Block
             horizontalAlign = 'start'
             verticalAlign= 'start'
@@ -321,6 +333,7 @@ export const LiarsDiceDisplay = () => {
                   bullshitLogString('Player 1');
                 }}
                 overrides={{BaseButton: {style: {width: '60px'}}}}
+                disabled={!rolled || betLog['dieNumber'] === '0'}
               >
                 Bullshit
               </Button>
@@ -332,20 +345,23 @@ export const LiarsDiceDisplay = () => {
                   exactLogString('Player 1');
                 }}
                 overrides={{BaseButton: {style: {width: '60px'}}}}
+                disabled={!rolled || betLog['dieNumber'] === '0'}
               >
                 {'Exact   '}
               </Button>
             </FlexCell>
+            <div style = {{height: '10px'}} />
+            <FlexCell>
+              <Button
+                onClick={()=>{
+                  reRollDice();
+                }}
+                disabled={rolled}
+              >
+                Roll
+              </Button>
+            </FlexCell>
           </Block>
-          <FlexCell>
-            <Button
-              onClick={()=>{
-                reRollDice();
-              }}
-            >
-              Roll
-            </Button>
-          </FlexCell>
         </Flex>
       </Container>
     </Container>
