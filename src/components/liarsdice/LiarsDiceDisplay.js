@@ -23,28 +23,30 @@ import five from '../../photos/5.gif';
 import six from '../../photos/6.gif';
 // import pokerTable from '../../photos/poker-table.jpg';
 
-import {NumberOptions, PHOTO_MAP, PHOTO_MAP_CONST} from './const.js';
+import {
+  NumberOptions,
+  NumberOfPlayersOptions,
+  PHOTO_MAP,
+  PHOTO_MAP_CONST}
+  from './const.js';
 const numWords = require('num-words');
 
 const getPhoto = (number, i) => {
   return (
-    <FlexCell
-      marginTop = {'100px'}
-    >
-      <img
-        key={i}
-        src={PHOTO_MAP[number]}
-        alt={PHOTO_MAP_CONST[number]}
-        height={100}
-        width={100}
-      />
-    </FlexCell>
+    <img
+      key={i}
+      src={PHOTO_MAP[number]}
+      alt={PHOTO_MAP_CONST[number]}
+      height={100}
+      width={100}
+    />
   );
 };
 
 // <img src={pokerTable} height={400} width={700} />
 
 export const LiarsDiceDisplay = () => {
+  const [numPlayers, setNumPlayers] = useState([{label: '1', id: 1}]);
   const [currentNumberOfDie, setCurrentNumberOfDie] = useState(5);
   const [diceNumbers, setDiceNumbers] = useState([]);
   const [betQuantity, setBetQuantity] = useState('');
@@ -103,7 +105,7 @@ export const LiarsDiceDisplay = () => {
     Please enter in a higher bet than the previous call`);
     } else {
       setLogString(`${logString}
-    ${player} has bet ${quantity} ${dieNumber}s`);
+    ${player} has bet ${numToWordCapitalize(quantity)} ${dieNumber}s`);
       setBetLog({quantity: quantity, dieNumber: dieNumber});
     }
   };
@@ -159,6 +161,19 @@ export const LiarsDiceDisplay = () => {
     return numToWord.charAt(0).toUpperCase() + numToWord.slice(1);
   };
 
+  const visualizeNumPlayers = (numberOfPlayers) => {
+    const playerArray = [];
+    for (let i = 1; i < numberOfPlayers + 1; i ++) {
+      playerArray.push(
+          <Container
+            key = {i}
+            height = {'20px'}
+          >
+            {`Player ${i}`}
+          </Container>);
+    }
+    return playerArray;
+  };
 
   return (
     <Container>
@@ -177,15 +192,35 @@ export const LiarsDiceDisplay = () => {
             width={'70%'}
           >
             <Flex
-              horizontalAlign = {'center'}
+              horizontalAlign = {'start'}
             >
-              {diceNumbers.length > 0 ? (diceNumbers.map((number, i) => {
-                return (getPhoto(number, i));
-              })):(
-                <h3>
-                  The Game is Starting
-                </h3>
-              )}
+              <FlexCell>
+                <Container>
+                  <Select
+                    options = {NumberOfPlayersOptions}
+                    value = {numPlayers}
+                    onChange= {(e) => setNumPlayers(e.value)}
+                    maxDropdownHeight={'200px'}
+                    clearable={false}
+                    height = {SIZE.mini}
+                    disabled={rolled}
+                  />
+                  {visualizeNumPlayers(numPlayers[0].id)}
+                </Container>
+              </FlexCell>
+              <FlexCell>
+                <Container
+                  borderStyle={'solid'}
+                >
+                  {diceNumbers.length > 0 ? (diceNumbers.map((number, i) => {
+                    return (getPhoto(number, i));
+                  })):(
+                    <h3>
+                      The Game is Starting
+                    </h3>
+                  )}
+                </Container>
+              </FlexCell>
             </Flex>
           </FlexCell>
           <FlexCell

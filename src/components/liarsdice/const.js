@@ -16,6 +16,15 @@ export const NumberOptions = [
   {label: '6', id: '6'},
 ];
 
+export const NumberOfPlayersOptions = [
+  {label: '1', id: 1},
+  {label: '2', id: 2},
+  {label: '3', id: 3},
+  {label: '4', id: 4},
+  {label: '5', id: 5},
+  {label: '6', id: 6},
+];
+
 export const PHOTO_MAP = {
   1: one,
   2: two,
