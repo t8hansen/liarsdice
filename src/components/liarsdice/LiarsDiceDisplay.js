@@ -173,12 +173,18 @@ export const LiarsDiceDisplay = () => {
             <Button
               height={'20px'}
               size={SIZE.mini}
+              onClick={() => playerJoinLogString(i)}
             >
               Join
             </Button>
           </Container>);
     }
     return playerArray;
+  };
+
+  const playerJoinLogString = (playerNum) => {
+    setLogString(`${logString}
+  Player ${playerNum} has joined`);
   };
 
   return (
