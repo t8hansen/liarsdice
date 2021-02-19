@@ -167,9 +167,15 @@ export const LiarsDiceDisplay = () => {
       playerArray.push(
           <Container
             key = {i}
-            height = {'20px'}
+            height = {'30px'}
           >
             {`Player ${i}`}
+            <Button
+              height={'20px'}
+              size={SIZE.mini}
+            >
+              Join
+            </Button>
           </Container>);
     }
     return playerArray;
